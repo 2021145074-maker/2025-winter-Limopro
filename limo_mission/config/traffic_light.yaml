@@ -1,0 +1,30 @@
+# Red HSV thresholds (two ranges for hue wrap-around)
+red_h_low1: 10
+red_h_high1: 60
+red_h_low2: 160
+red_h_high2: 180
+red_s_low: 0
+red_s_high: 100
+red_v_low: 150
+red_v_high: 255
+
+# Green HSV thresholds
+green_h_low: 50
+green_h_high: 180
+green_s_low: 30
+green_s_high: 150
+green_v_low: 100
+green_v_high: 255
+
+# Detection parameters
+min_area: 500
+circularity_thresh: 0.8
+
+# ROI settings (신호등은 화면 상단에 있음)
+roi_top: 200
+roi_bottom: 350
+roi_left: 0
+roi_right: 200
+
+# Brightness adjustment for ROI (밝은 환경에서 낮추기)
+brightness_factor: 0.7 # 0.1~1.0 (낮을수록 어둡게)

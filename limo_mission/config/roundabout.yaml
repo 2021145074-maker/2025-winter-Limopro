@@ -1,0 +1,7 @@
+# ===== LiDAR 장애물 감지 파라미터 =====
+detect_x_min: 0.5          # 전방 감지 최소 거리 (m)
+detect_x_max: 1.2          # 전방 감지 최대 거리 (m)
+obstacle_threshold: 3      # 장애물 판단 포인트 수
+
+# ===== 조향 파라미터 =====
+steering_gain: 1.0         # 조향 게인 (1.0=기본, 높을수록 민감)

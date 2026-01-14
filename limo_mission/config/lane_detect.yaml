@@ -1,0 +1,49 @@
+# Lane detection parameters (WHITE lanes on BLACK background)
+# Using HLS colorspace: H=Hue, L=Lightness, S=Saturation
+lane_h_low: 0
+lane_h_high: 180
+lane_l_low: 250
+lane_l_high: 255
+lane_s_low: 0
+lane_s_high: 255
+
+# Dual ROI settings for curve detection
+roi_top: 280        # Top of far ROI (look-ahead)
+roi_mid: 380        # Split point: bottom of far ROI, top of near ROI
+roi_bottom: 480     # Bottom of near ROI (immediate steering)
+
+# cmd_vel publishing (set to true in launch file for standalone lane tracing)
+publish_cmd_vel: false
+
+# Base speed
+base_speed: 0.3
+max_steering: 0.5
+
+# Curve handling (default)
+curve_speed_factor: 0.5  # Speed reduction in curves (0.3-0.8)
+
+# =====================================================
+# Mode-specific parameters (튜닝 시 각 모드별로 조정)
+# =====================================================
+
+# NORMAL mode (직선, S자, U자 - 기본 구간)
+normal_kp: 0.012           # Proportional gain
+normal_kd: 0.005           # Derivative gain
+normal_lookahead: 0.4      # Far ROI weight (0-1)
+normal_lane_offset: 180    # Single lane offset (pixels)
+
+# ROUNDABOUT mode (회전교차로 - 지속적 커브)
+roundabout_kp: 0.015       # 더 민감하게
+roundabout_kd: 0.008       # 흔들림 방지 강화
+roundabout_lookahead: 0.6  # 더 멀리 봄
+roundabout_lane_offset: 150  # 안쪽으로 더 붙음
+
+# OBSTACLE mode (장애물 회피 - 빠른 반응)
+obstacle_kp: 0.012
+obstacle_kd: 0.006
+obstacle_lookahead: 0.3    # 가까운 곳 집중
+obstacle_lane_offset: 180
+
+# Stopline detection (YELLOW)
+stopline_min_area: 3000
+stopline_ignore_duration: 2.0

@@ -1,0 +1,48 @@
+<!-- 
+  Parking Mission Launch
+  - aruco_detector_node: ArUco 마커 감지 + 거리 계산
+  - lane_detect_node: 차선 추적 (주차 트리거 전까지)
+  - parking_node: ArUco Marker가 일정 거리 이내일 때 주차 수행
+  
+  동작 흐름:
+  1. 라인 트레이싱으로 주행
+  2. ArUco Marker ID 0이 trigger_distance 이내로 감지되면 주차 시작
+  3. 주차 완료 후 종료 (라인 트레이싱도 중단)
+-->
+<launch>
+    <!-- ========================================
+         ArUco Detector Node (마커 감지 + 거리)
+         - /aruco_detector/markers: 감지된 마커 ID 배열
+         - /aruco_detector/marker_info: [id, distance, ...]
+    ======================================== -->
+    <node name="aruco_detector_node" pkg="limo_mission" type="aruco_detector_node.py" output="screen">
+        <!-- 마커 실제 크기 (미터) - 거리 계산에 필요 -->
+        <param name="marker_size" value="0.05"/>  <!-- 5cm -->
+    </node>
+    
+    <!-- ========================================
+         Lane Detect Node (차선 추적)
+         - publish_cmd_vel: true -> 직접 /cmd_vel 발행
+         - 주차 시작 시 자동으로 cmd_vel 발행 중지
+    ======================================== -->
+    <node name="lane_detect_node" pkg="limo_mission" type="lane_detect_node.py" output="screen">
+        <rosparam file="$(find limo_mission)/config/lane_detect.yaml" command="load"/>
+        <param name="publish_cmd_vel" value="true"/>
+    </node>
+    
+    <!-- ========================================
+         Parking Node (주차)
+         - target_marker_id: 주차 트리거 마커 ID
+         - trigger_distance: 이 거리 이내일 때 주차 시작 (미터)
+    ======================================== -->
+    <node name="parking_node" pkg="limo_mission" type="parking_node.py" output="screen">
+        <rosparam file="$(find limo_mission)/config/parking.yaml" command="load"/>
+    </node>
+    
+    <!-- ========================================
+         RQT Image View (시각화)
+    ======================================== -->
+    <node name="rqt_lane_detect" pkg="rqt_image_view" type="rqt_image_view" args="/limo/lane_detect/image"/>
+    <node name="rqt_aruco_detector" pkg="rqt_image_view" type="rqt_image_view" args="/aruco_detector/image"/>
+    
+</launch>

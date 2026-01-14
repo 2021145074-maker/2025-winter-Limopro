@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- 
+    Roundabout Navigation
+    - Lane tracing with roundabout obstacle detection
+    -->
+    
+    <arg name="camera_topic" default="/camera/color/image_raw/compressed"/>
+    <arg name="lidar_topic" default="/scan"/>
+    <arg name="show_image" default="true"/>
+    
+    <!-- Lane Detection Node -->
+    <node pkg="limo_mission" type="lane_detect_node.py" name="lane_detect_node" output="screen">
+        <rosparam file="$(find limo_mission)/config/lane_detect.yaml" command="load"/>
+        <remap from="/camera/color/image_raw/compressed" to="$(arg camera_topic)"/>
+    </node>
+    
+    <!-- Roundabout Node -->
+    <node pkg="limo_mission" type="roundabout_node.py" name="roundabout_node" output="screen">
+        <rosparam file="$(find limo_mission)/config/roundabout.yaml" command="load"/>
+        <remap from="/scan" to="$(arg lidar_topic)"/>
+    </node>
+    
+    <!-- Image Viewers -->
+    <node if="$(arg show_image)" pkg="rqt_image_view" type="rqt_image_view" name="lane_viewer" args="/limo/lane_detect/image"/>
+    <node if="$(arg show_image)" pkg="rqt_image_view" type="rqt_image_view" name="roundabout_viewer" args="/limo/roundabout/debug"/>
+
+</launch>

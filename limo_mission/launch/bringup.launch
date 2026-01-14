@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- 
+        LIMO Robot Bringup Launch File
+        - Starts LIMO base driver (limo_bringup)
+        - Starts Astra Camera (dabai_u3)
+    -->
+
+    <!-- Arguments -->
+    <arg name="open_rviz" default="false" doc="Open RViz visualization"/>
+
+    <!-- LIMO Base Bringup -->
+    <include file="$(find limo_bringup)/launch/limo_start.launch"/>
+
+    <!-- Astra Camera (Dabai U3) -->
+    <include file="$(find astra_camera)/launch/dabai_u3.launch"/>
+
+    <!-- Optional: RViz -->
+    <group if="$(arg open_rviz)">
+        <node name="rviz" pkg="rviz" type="rviz" args="-d $(find limo_mission)/rviz/bringup.rviz" output="screen"/>
+    </group>
+
+</launch>

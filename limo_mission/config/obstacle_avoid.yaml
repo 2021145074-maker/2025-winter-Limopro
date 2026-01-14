@@ -1,0 +1,17 @@
+# ===== LiDAR Scan Parameters =====
+scan_angle: 30.0           # 전방 스캔 각도 (±degrees)
+num_sectors: 12            # 섹터 수
+
+# ===== Distance Thresholds =====
+safe_distance: 1.4         # 안전 거리 (이 이상이면 열림)
+stop_distance: 0.1         # 긴급 정지 거리
+
+# ===== Speed Parameters =====
+avoid_speed: 0.2           # 회피 중 속도
+
+# ===== Steering Parameters =====
+max_steering: 0.5          # 최대 조향 각속도
+steering_gain: 0.02        # 각도→조향 변환 게인
+
+# ===== Hysteresis Parameters =====
+clear_threshold: 20        # 장애물 없는 상태가 이 카운트 이상 유지되면 lane tracing 복귀

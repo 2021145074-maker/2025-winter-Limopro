@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- 
+    Pedestrian Avoidance
+    - Lane tracing with pedestrian stop & wait
+    - Stops when pedestrian detected, resumes when clear
+    -->
+    
+    <arg name="camera_topic" default="/camera/color/image_raw/compressed"/>
+    <arg name="show_image" default="true"/>
+    
+    <!-- Lane Detection Node -->
+    <node pkg="limo_mission" type="lane_detect_node.py" name="lane_detect_node" output="screen">
+        <rosparam file="$(find limo_mission)/config/lane_detect.yaml" command="load"/>
+        <remap from="/camera/color/image_raw/compressed" to="$(arg camera_topic)"/>
+    </node>
+    
+    <!-- Pedestrian Node -->
+    <node pkg="limo_mission" type="pedestrian_node.py" name="pedestrian_node" output="screen">
+        <rosparam file="$(find limo_mission)/config/pedestrian.yaml" command="load"/>
+    </node>
+    
+    <!-- Image Viewers -->
+    <node if="$(arg show_image)" pkg="rqt_image_view" type="rqt_image_view" name="lane_viewer" args="/limo/lane_detect/image"/>
+    <node if="$(arg show_image)" pkg="rqt_image_view" type="rqt_image_view" name="pedestrian_viewer" args="/limo/pedestrian/debug"/>
+
+</launch>

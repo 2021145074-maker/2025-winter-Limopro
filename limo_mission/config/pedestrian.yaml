@@ -1,0 +1,7 @@
+# ===== Scan Parameters =====
+scan_angle: 45.0           # 전방 스캔 각도 (±degrees)
+num_sectors: 8             # 섹터 수
+
+# ===== Distance Thresholds =====
+detect_distance: 0.5       # 보행자 감지 거리 (m)
+stop_distance: 0.2         # 긴급 정지 거리 (m)
