@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- ============================================ -->
+    <!-- Custom Integrated Launch File                -->
+    <!-- 모든 미션 노드를 한 번에 실행                    -->
+    <!-- ============================================ -->
+    
+    <!-- Arguments -->
+    <arg name="initial_state" default="IDLE"/>
+    <!-- Available states: IDLE, WAITING_TRAFFIC_LIGHT, DETECT_PEDESTRIAN, ROTARY, OBSTACLE_AVOIDANCE, PARKING -->
+    
+    <!-- ============================================ -->
+    <!-- 1. Bringup (LIMO Base + Camera + LiDAR)     -->
+    <!-- ============================================ -->
+    <include file="$(find limo_mission)/launch/bringup.launch"/>
+    
+    <!-- ============================================ -->
+    <!-- 2. State Manager                            -->
+    <!-- ============================================ -->
+    <node pkg="limo_mission" type="modified_state_manager.py" name="state_manager2" output="screen"
+      launch-prefix="bash -c 'sleep 1; exec $0 $@' --">
+        <param name="initial_state" value="$(arg initial_state)"/>
+    </node>
+    
+    <!-- ============================================ -->
+    <!-- 3. Traffic Light Detection                  -->
+    <!-- ============================================ -->
+    <node pkg="limo_mission" type="modified_traffic_light_node.py" name="traffic_light_node" output="screen">
+        <rosparam file="$(find limo_mission)/config/traffic_light.yaml" command="load"/>
+    </node>
+    
+    <!-- ============================================ -->
+    <!-- 4. Lane Detection (Final Version)           -->
+    <!-- ============================================ -->
+    <node pkg="limo_mission" type="lane_following.py" name="lane_following_node" output="screen">
+    </node>
+    
+    <!-- ============================================ -->
+    <!-- 5. Pedestrian Detection (Final Version)     -->
+    <!-- ============================================ -->
+    <node pkg="limo_mission" type="final_pedestrian.py" name="pedestrian_node" output="screen">
+        <rosparam file="$(find limo_mission)/config/pedestrian.yaml" command="load"/>
+    </node>
+    
+    <!-- ============================================ -->
+    <!-- 6. Rotary (Roundabout) Navigation           -->
+    <!-- ============================================ -->
+    <node pkg="limo_mission" type="modified_rotary.py" name="rotary_node" output="screen">
+    </node>
+    
+    <!-- ============================================ -->
+    <!-- 7. Obstacle Avoidance (Histogram + DBSCAN)  -->
+    <!-- ============================================ -->
+    <node pkg="limo_mission" type="histogram_obstacle_avoid_node.py" name="obstacle_avoid_node" output="screen">
+    </node>
+    
+    <!-- ============================================ -->
+    <!-- 8. Parking                                  -->
+    <!-- ============================================ -->
+    <node pkg="limo_mission" type="modified_parking_node.py" name="parking_node" output="screen">
+    </node>
+    
+    <!-- ============================================ -->
+    <!-- 9. ArUco Marker Detector                    -->
+    <!-- ============================================ -->
+    <node pkg="limo_mission" type="aruco_detector_node.py" name="aruco_detector_node" output="screen">
+    </node>
+
+</launch>
